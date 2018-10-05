@@ -6,6 +6,9 @@ It is mutually compatible.
 ## Installation
 
 ```shell
+go get -u github.com/shamaton/lz4msgpack
+
+# orig
 go get -u github.com/d-o-n-u-t-s/lz4msgpack
 ```
 
