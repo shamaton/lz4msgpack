@@ -1,11 +1,10 @@
 package lz4msgpack
 
 import (
-	"bytes"
 	"encoding/binary"
 
 	"github.com/pierrec/lz4"
-	"github.com/vmihailenco/msgpack"
+	"github.com/shamaton/msgpack"
 )
 
 const (
@@ -21,9 +20,11 @@ const (
 	offsetLength         = 11
 )
 
+type unmarshaller func([]byte, interface{}) error
+
 // Marshal returns bytes that is the MessagePack encoded and lz4 compressed.
-func Marshal(v ...interface{}) ([]byte, error) {
-	data, err := msgpack.Marshal(v...)
+func Marshal(v interface{}) ([]byte, error) {
+	data, err := msgpack.Encode(v)
 	if err != nil {
 		return data, err
 	}
@@ -31,14 +32,12 @@ func Marshal(v ...interface{}) ([]byte, error) {
 }
 
 // MarshalAsArray returns bytes as array format.
-func MarshalAsArray(v ...interface{}) ([]byte, error) {
-	var buf bytes.Buffer
-	enc := msgpack.NewEncoder(&buf).StructAsArray(true)
-	err := enc.Encode(v...)
+func MarshalAsArray(v interface{}) ([]byte, error) {
+	data, err := msgpack.EncodeStructAsArray(v)
 	if err != nil {
-		return buf.Bytes(), err
+		return data, err
 	}
-	return compress(buf.Bytes())
+	return compress(data)
 }
 
 // compress by lz4
@@ -62,14 +61,24 @@ func compress(data []byte) ([]byte, error) {
 // Unmarshal decodes the MessagePack-encoded data and stores the result
 // in the value pointed to by v.
 // In case of data compressed by lz4, it will be uncompressed before decode.
-func Unmarshal(data []byte, v ...interface{}) error {
+func Unmarshal(data []byte, v interface{}) error {
+	return unmarshal(data, v, msgpack.Decode)
+}
+
+// UnmarshalAsArray is mostly same functional.
+// But struct data's format must be array format.
+func UnmarshalAsArray(data []byte, v interface{}) error {
+	return unmarshal(data, v, msgpack.DecodeStructAsArray)
+}
+
+func unmarshal(data []byte, v interface{}, f unmarshaller) error {
 	if data[offsetCodeExt32] != msgpackCodeExt32 || data[offsetCodeLz4] != extCodeLz4 {
-		return msgpack.Unmarshal(data, v...)
+		return f(data, v)
 	}
 	buf := make([]byte, binary.BigEndian.Uint32(data[offsetUncompressSize:offsetLength]))
 	_, err := lz4.UncompressBlock(data[offsetLength:], buf)
 	if err != nil {
 		return err
 	}
-	return msgpack.Unmarshal(buf, v...)
+	return f(buf, v)
 }
