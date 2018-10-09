@@ -7,8 +7,8 @@
     ".",
     "internal/xxh32"
   ]
-  revision = "bb6bfd13c6a262f1943c0446eb25b7f54c1fb9a2"
-  version = "v2.0.6"
+  revision = "635575b42742856941dbc767b44905bb9ba083f6"
+  version = "v2.0.7"
 
 [[projects]]
   name = "github.com/shamaton/msgpack"
@@ -27,6 +27,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1dfd9559fe94bb5032b61c428e511571a8f82c059eb7a3469901f0d90737ad54"
+  inputs-digest = "f3882176b24043976c2f344202d28be9e638ffe7a96c27e2d00f3c1092f03982"
   solver-name = "gps-cdcl"
   solver-version = 1
