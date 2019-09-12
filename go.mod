@@ -1,6 +1,8 @@
-module github.com/d-o-n-u-t-s/lz4msgpack
+module github.com/shamaton/lz4msgpack
+
+go 1.13
 
 require (
-	github.com/pierrec/lz4 v0.0.0-20190327172049-315a67e90e41
-	github.com/shamaton/msgpack v1.1.0
+	github.com/pierrec/lz4 v2.3.0+incompatible
+	github.com/shamaton/msgpack v1.1.1
 )
