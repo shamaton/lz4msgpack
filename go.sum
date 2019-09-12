@@ -1,0 +1,4 @@
+github.com/pierrec/lz4 v2.3.0+incompatible h1:CZzRn4Ut9GbUkHlQ7jqBXeZQV41ZSKWFc302ZU6lUTk=
+github.com/pierrec/lz4 v2.3.0+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
+github.com/shamaton/msgpack v1.1.1 h1:wZcK/aIifWvsDl6jXo+c/tRYo9Vnb8abWCossDbj2Ww=
+github.com/shamaton/msgpack v1.1.1/go.mod h1:ibiaNQRTCUISAYkkyOpaSCEBiCAxXe6u6Mu1sQ6945U=
