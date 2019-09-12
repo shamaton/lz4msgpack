@@ -24,16 +24,16 @@ type unmarshaller func([]byte, interface{}) error
 
 // Marshal returns bytes that is the MessagePack encoded and lz4 compressed.
 func Marshal(v interface{}) ([]byte, error) {
-	data, err := msgpack.Encode(v)
-	if err != nil {
-		return data, err
-	}
-	return compress(data)
+	return marshal(v, msgpack.Encode)
 }
 
-// MarshalAsArray returns bytes as array format.
+// MarshalAsArray returns bytes as array format that is the MessagePack encoded and lz4 compressed.
 func MarshalAsArray(v interface{}) ([]byte, error) {
-	data, err := msgpack.EncodeStructAsArray(v)
+	return marshal(v, msgpack.EncodeStructAsArray)
+}
+
+func marshal(v interface{}, marshaler func(interface{}) ([]byte, error)) ([]byte, error) {
+	data, err := marshaler(v)
 	if err != nil {
 		return data, err
 	}
