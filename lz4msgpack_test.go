@@ -8,8 +8,8 @@ import (
 	"github.com/shamaton/msgpack"
 )
 
-type marshaler func(v interface{}) ([]byte, error)
-type unmarshaller func([]byte, interface{}) error
+type marshaller func(v interface{}) ([]byte, error)
+type unMarshaller func([]byte, interface{}) error
 
 func Test(t *testing.T) {
 	type Data struct {
@@ -25,14 +25,17 @@ func Test(t *testing.T) {
 	}
 	t.Log(data)
 
-	tester := func(name string, m marshaler, u unmarshaller) {
+	tester := func(name string, m marshaller, u unMarshaller) {
 		b, err := m(&data)
 		if err != nil {
 			t.Fatal("marshal failed", err)
 		}
 		t.Logf("%s: %d", name, len(b))
 		var data1 Data
-		u(b, &data1)
+		err = u(b, &data1)
+		if err != nil {
+			t.Fatal("unmarshal failed", err)
+		}
 		if !reflect.DeepEqual(data, data1) {
 			t.Fatal(name + " Error")
 		}
