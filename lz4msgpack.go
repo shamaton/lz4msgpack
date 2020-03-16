@@ -69,6 +69,7 @@ func compress(data []byte) ([]byte, error) {
 	case dataSize <= math.MaxUint16:
 
 		startIndex -= 4
+		index = startIndex
 		buf[index] = codeExt16
 		index++
 
